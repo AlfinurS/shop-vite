@@ -2,7 +2,18 @@
   <header>
     <div class="logo">E-shop</div>
     <div class="cart">
-
+      <form action="#" class="search-form">
+        <input 
+          v-model="search"
+          @input="(event) => handleSearch(event.target.value)"
+          type="text"
+          class="search-field"
+          placeholder="Поиск товаров"
+        >
+        <button class="btn-search" type="submit">
+          <i class="fas fa-search"></i>
+        </button>
+      </form>
       <button class="btn-cart" type="button" @click="showCart">Корзина</button>
 
       <div class="cart-block" v-if="isShowCart">
@@ -25,6 +36,7 @@
 
   export default {
     name: "HeaderComponent",
+    emits: ["handleSearch"],
     props: {
       product: {
         type: Object,
@@ -34,37 +46,23 @@
 
     data() {
       return {
-        //search: "",
-        //catalogUrl: `/catalogData.json`,
+        search: "",
         cartUrl: `/getBasket.json`,
         imgCatalog: "https://placehold.it/200x150",
         isShowCart: false,
         cart: [],
-        //products: [],
         deleteCartUrl: `/deleteFromBasket.json`,
       }
     },
-    watch: { 
-      product(newVal) {
-          this.product = newVal;
-        }
-    },
-
-/*     props: {
-      product: {
-        type: Object,
-        default: "",
-      },
-      formFilterProps: {
-        type: Object,
-        default: ()=>({}),
-      }
-    }, */
 
     methods: {
       showCart(){
         this.isShowCart = !this.isShowCart;
       }, 
+
+      handleSearch(search){
+        this.$emit("handleSearch", search);
+      },
 
       getJson(url){
         return fetch(url)
@@ -101,16 +99,6 @@
       },
     },
 
-/*     computed: {
-      filteredProducts() {
-        if (this.search !== "") {
-          const regexp = new RegExp(this.search, 'i');
-          this.filtered = this.products.filter(product => regexp.test(product.product_name));
-          return this.filtered;
-        }
-        return this.products;
-      },
-    }, */
 
     mounted(){
       
@@ -118,10 +106,6 @@
         .then(data => {
             this.cart = data.contents;
         })
-/*       this.getJson(`${API + this.catalogUrl}`)
-      .then(data => {
-          this.products = [...data];
-      }) */
     }
   }
 </script>

@@ -1,7 +1,7 @@
 <template>
 <div id="app">
-  <HeaderComponent ref="headerComponentRef"></HeaderComponent>
-  <ProductsList @addProduct="addProduct"></ProductsList>
+  <HeaderComponent ref="headerComponentRef" @handleSearch="handleSearch"></HeaderComponent>
+  <ProductsList ref="productsListRef" @addProduct="addProduct"></ProductsList>
 </div>
 </template>
 
@@ -11,7 +11,7 @@
 
   export default {
     name: "App",
-    emits: ["addProduct"],
+    emits: ["addProduct", "handleSearch"],
     components: { HeaderComponent, ProductsList },
 
     data() {
@@ -40,6 +40,11 @@
 
       addProduct(product) {
         this.$refs.headerComponentRef.addProduct(product);
+      },
+
+      handleSearch(search) {
+        this.$refs.productsListRef.handleSearch(search);
+        console.log(search);
       },
     },
     mounted() {

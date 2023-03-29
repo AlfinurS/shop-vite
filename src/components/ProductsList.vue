@@ -1,12 +1,4 @@
 <template>
-  <header>
-      <form action="#" class="search-form">
-        <input type="text" class="search-field" v-model="search" placeholder="Поиск товаров" >
-        <button class="btn-search" type="submit">
-          <i class="fas fa-search"></i>
-        </button>
-      </form>
-  </header>
  <main>
       <div class="products">
           <div class="product-item" v-for="product in filteredProducts" :key="product.id_product">
@@ -40,17 +32,6 @@
       }
     },
 
-    /* props: {
-      awbs: {
-        type: String,
-        default: "",
-      },
-      formFilterProps: {
-        type: Object,
-        default: ()=>({}),
-      }
-    }, */
-
     methods: {
       
       getJson(url){
@@ -63,19 +44,11 @@
 
       addProduct(product){
         this.$emit("addProduct", product);
-        /* const index = this.products.findIndex((item) => item.id_product === product.id_product);
-        const productFind = this.cart.find(product => product.id_product === this.products[index].id_product);
-        if (productFind) {
-          ++productFind.quantity;
-          //this.showCart(productFind)
-        } else {
-          const cartProduct = JSON.parse(JSON.stringify(product))
-          cartProduct.quantity = 1;
-          this.cart.push(cartProduct);
-          console.log(this.cart);
-        } */
       },
 
+      handleSearch(search){
+        this.search = search;
+      }
     },
 
     computed: {
