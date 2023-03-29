@@ -1,46 +1,45 @@
 <template>
 <div id="app">
-  <HeaderComponent></HeaderComponent>
-  <!-- <main>
-      <div class="products">
-          <div class="product-item" v-for="product in filteredProducts" :key="product.id_product">
-              <img :src="imgCatalog" alt="Some img">
-              <div class="desc">
-                  <h3>{{product.product_name}}</h3>
-                  <p>{{product.price}} $</p>
-                  <button class="buy-btn" @click="addProduct(product)">Купить</button>
-              </div>
-          </div>
-      </div>
-  </main> -->
+  <HeaderComponent ref="headerComponentRef"></HeaderComponent>
+  <ProductsList @addProduct="addProduct"></ProductsList>
 </div>
 </template>
 
 <script>
-  import HeaderComponent from "./components/HeaderComponent.vue"
+  import HeaderComponent from "./components/HeaderComponent.vue";
+  import ProductsList from "./components/ProductsList.vue";
 
   export default {
     name: "App",
-    components: { HeaderComponent },
+    emits: ["addProduct"],
+    components: { HeaderComponent, ProductsList },
+
     data() {
       return {
         formFilter: {},
+
       }
     },
-    props: {
+/*     props: {
       awbs: {
         type: Object,
       },
       formFilterProps: {
         type: Object,
       }
-    },
+    }, */
+    
     methods: {
       setFilter() {
         this.$emit('setFilter', this.formFilter);
       },
+
       resetFilter() {
         this.formFilter.reset();
+      },
+
+      addProduct(product) {
+        this.$refs.headerComponentRef.addProduct(product);
       },
     },
     mounted() {

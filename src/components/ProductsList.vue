@@ -1,0 +1,108 @@
+<template>
+  <header>
+      <form action="#" class="search-form">
+        <input type="text" class="search-field" v-model="search" placeholder="Поиск товаров" >
+        <button class="btn-search" type="submit">
+          <i class="fas fa-search"></i>
+        </button>
+      </form>
+  </header>
+ <main>
+      <div class="products">
+          <div class="product-item" v-for="product in filteredProducts" :key="product.id_product">
+              <img :src="imgCatalog" alt="Some img">
+              <div class="desc">
+                  <h3>{{product.product_name}}</h3>
+                  <p>{{product.price}} $</p>
+                  <button class="buy-btn" @click='addProduct(product)'>Купить</button>
+                  
+              </div>
+          </div>
+      </div>
+  </main>
+</template>
+  
+<script>
+  const API = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
+
+  export default {
+    name: "ProductsList",
+    emits: ["addProduct"],
+    data() {
+      return {
+        search: "",
+        catalogUrl: `/catalogData.json`,
+        cartUrl: `/getBasket.json`,
+        imgCatalog: "https://placehold.it/200x150",
+        products: [],
+        cart: [],
+
+      }
+    },
+
+    /* props: {
+      awbs: {
+        type: String,
+        default: "",
+      },
+      formFilterProps: {
+        type: Object,
+        default: ()=>({}),
+      }
+    }, */
+
+    methods: {
+      
+      getJson(url){
+        return fetch(url)
+          .then(result => result.json())
+          .catch(error => {
+            console.log(error);
+          })
+      },
+
+      addProduct(product){
+        this.$emit("addProduct", product);
+        /* const index = this.products.findIndex((item) => item.id_product === product.id_product);
+        const productFind = this.cart.find(product => product.id_product === this.products[index].id_product);
+        if (productFind) {
+          ++productFind.quantity;
+          //this.showCart(productFind)
+        } else {
+          const cartProduct = JSON.parse(JSON.stringify(product))
+          cartProduct.quantity = 1;
+          this.cart.push(cartProduct);
+          console.log(this.cart);
+        } */
+      },
+
+    },
+
+    computed: {
+      filteredProducts() {
+        if (this.search !== "") {
+          const regexp = new RegExp(this.search, 'i');
+          this.filtered = this.products.filter(product => regexp.test(product.product_name));
+          return this.filtered;
+        }
+        return this.products;
+      },
+    },
+
+    mounted(){
+      this.getJson(`${API + this.catalogUrl}`)
+        .then(data => {
+            this.products = [...data];
+        })
+
+      this.getJson(`${API + this.cartUrl}`)
+      .then(data => {
+          this.cart = data.contents;
+      })
+    }
+  }
+</script>
+
+<style scoped>
+
+</style>

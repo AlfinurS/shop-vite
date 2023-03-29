@@ -3,13 +3,6 @@
     <div class="logo">E-shop</div>
     <div class="cart">
 
-      <form action="#" class="search-form">
-        <input type="text" class="search-field" v-model="search" placeholder="Поиск товаров" >
-        <button class="btn-search" type="submit">
-          <i class="fas fa-search"></i>
-        </button>
-      </form>
-
       <button class="btn-cart" type="button" @click="showCart">Корзина</button>
 
       <div class="cart-block" v-if="isShowCart">
@@ -31,10 +24,18 @@
   const API = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
 
   export default {
+    name: "HeaderComponent",
+    props: {
+      product: {
+        type: Object,
+        default: () => ({}),
+      },
+    },
+
     data() {
       return {
-        search: "",
-        catalogUrl: `/catalogData.json`,
+        //search: "",
+        //catalogUrl: `/catalogData.json`,
         cartUrl: `/getBasket.json`,
         imgCatalog: "https://placehold.it/200x150",
         isShowCart: false,
@@ -43,10 +44,15 @@
         deleteCartUrl: `/deleteFromBasket.json`,
       }
     },
+    watch: { 
+      product(newVal) {
+          this.product = newVal;
+        }
+    },
 
-    /* props: {
-      awbs: {
-        type: String,
+/*     props: {
+      product: {
+        type: Object,
         default: "",
       },
       formFilterProps: {
@@ -68,10 +74,8 @@
           })
       },
 
-      /* addProduct(product){
-        const index = this.products.findIndex((item) => item.id_product === product.id_product);
-        let productFind = this.cart.find(product => product.id_product === this.products[index].id_product);
-        console.log(this.products);
+      addProduct(product){
+        const productFind = this.cart.find((item) => item.id_product === product.id_product);
         if (productFind) {
           ++productFind.quantity;
           //this.showCart(productFind)
@@ -79,9 +83,8 @@
           const cartProduct = JSON.parse(JSON.stringify(product))
           cartProduct.quantity = 1;
           this.cart.push(cartProduct);
-          console.log(this.cart);
         }
-      }, */
+      },
 
       deleteProduct(product){
         this.getJson(`${API + this.deleteCartUrl}`)
@@ -98,7 +101,7 @@
       },
     },
 
-    computed: {
+/*     computed: {
       filteredProducts() {
         if (this.search !== "") {
           const regexp = new RegExp(this.search, 'i');
@@ -107,18 +110,18 @@
         }
         return this.products;
       },
-    },
+    }, */
 
     mounted(){
-      /* this.getJson(`${API + this.catalogUrl}`)
-        .then(data => {
-            this.products = [...data];
-        }) */
-
+      
       this.getJson(`${API + this.cartUrl}`)
         .then(data => {
             this.cart = data.contents;
         })
+/*       this.getJson(`${API + this.catalogUrl}`)
+      .then(data => {
+          this.products = [...data];
+      }) */
     }
   }
 </script>
