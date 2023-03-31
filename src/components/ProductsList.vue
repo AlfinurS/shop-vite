@@ -15,7 +15,7 @@
 </template>
   
 <script>
-  const API = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
+  const API = 'http://localhost:3000';
 
   export default {
     name: "ProductsList",
@@ -23,8 +23,8 @@
     data() {
       return {
         search: "",
-        catalogUrl: `/catalogData.json`,
-        cartUrl: `/getBasket.json`,
+        catalogUrl: `/api/products`,
+        cartUrl: `/api/cart`,
         imgCatalog: "https://placehold.it/200x150",
         products: [],
         cart: [],
